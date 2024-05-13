@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Get All created projects
+     * Get All user
      */
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     /**
-     * Save a project.
+     * Save or update a user.
      */
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody User task) {
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     /**
-     * Get an action by ID.
+     * Get a user by ID.
      */
     @GetMapping("/get-by-id")
     public ResponseEntity<?> getById(@RequestParam Long id) {
@@ -66,7 +66,7 @@ public class UserController {
 //    }
 
     /**
-     * Delete a post by ID.
+     * Delete a user by ID.
      */
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteById(@RequestParam Long id) throws IOException {

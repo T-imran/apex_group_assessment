@@ -13,28 +13,28 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * Get All Tasks
+     * Get All user
      */
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
     /**
-     * Save task to db.
+     * Save or update user to db.
      */
     public User save(User project) {
         return userRepository.save(project);
     }
 
     /**
-     * Find a task by id.
+     * Find a user by id.
      */
     public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
     /**
-     * Delete a task by id.
+     * Delete a user by id.
      */
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
