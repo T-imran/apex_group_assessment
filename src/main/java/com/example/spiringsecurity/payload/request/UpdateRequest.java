@@ -1,20 +1,15 @@
-package com.example.spiringsecurity.payload.response;
+package com.example.spiringsecurity.payload.request;
 
 import com.example.spiringsecurity.model.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class LoginResponse {
+public class UpdateRequest {
 
     private Long id;
     private String name;
-    private String userName;
     private String email;
     private String designation;
     private String deptMstCode;
     private Role role;
-    private String token;
 }

@@ -3,9 +3,14 @@ package com.example.spiringsecurity.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +22,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users_info")
 public class User implements UserDetails {
     @Id
@@ -25,9 +31,26 @@ public class User implements UserDetails {
     private Long id;
 
     private String name;
+
+    private String designation;
+
+    private String deptMstCode;
     private String email;
 
     private String password;
+
+    @CreatedDate
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    @Column(
+            insertable = false
+    )
+    private LocalDateTime lastUpdatedDate;
 
     @Enumerated(EnumType.STRING)
     private Role role;

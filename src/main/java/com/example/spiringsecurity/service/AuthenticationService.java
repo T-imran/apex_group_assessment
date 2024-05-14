@@ -5,6 +5,7 @@ import com.example.spiringsecurity.model.Role;
 import com.example.spiringsecurity.model.User;
 import com.example.spiringsecurity.payload.request.AuthenticateRequest;
 import com.example.spiringsecurity.payload.request.RegisterRequest;
+import com.example.spiringsecurity.payload.response.ApiResponse;
 import com.example.spiringsecurity.payload.response.LoginResponse;
 import com.example.spiringsecurity.payload.response.RegistrationResponse;
 import com.example.spiringsecurity.repository.UserRepository;
@@ -31,31 +32,25 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
-    public RegistrationResponse register(RegisterRequest request) {
+    public ApiResponse register(RegisterRequest request) {
 
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        if (request.getRole().equals("ADMIN")) {
-            user.setRole(Role.ADMIN);
-        }
-        if (request.getRole().equals("MANAGER")) {
-            user.setRole(Role.MANAGER);
-        }
-        if (request.getRole().equals("USER")) {
-            user.setRole(Role.USER);
-        }
+        user.setDesignation(request.getDesignation());
+        user.setDeptMstCode(request.getDeptMstCode());
+        user.setRole(Role.USER);
+
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
             userRepository.save(user);
             String jwtToken = jwtService.generateToken(user);
-            return new RegistrationResponse(jwtToken, false);
+            return new ApiResponse(true,"Registration complete successfully",new RegistrationResponse(jwtToken, false),null) ;
         }
-        return new RegistrationResponse(true);
-
+        return new ApiResponse(true,"Registration failed user already exist",new RegistrationResponse(true),null) ;
     }
 
-    public LoginResponse authenticate(AuthenticateRequest request) {
+    public ApiResponse authenticate(AuthenticateRequest request) {
 
         LoginResponse loginResponse = new LoginResponse();
         try {
@@ -73,16 +68,19 @@ public class AuthenticationService {
 
                 loginResponse.setId(user.getId());
                 loginResponse.setName(user.getName());
-                loginResponse.setRole(user.getRole());
+                loginResponse.setUserName(user.getUsername());
+                loginResponse.setDesignation(user.getDesignation());
+                loginResponse.setDeptMstCode(user.getDeptMstCode());
                 loginResponse.setEmail(user.getEmail());
+                loginResponse.setRole(user.getRole());
                 loginResponse.setToken(token);
 
             }
 
         } catch (BadCredentialsException e) {
-            throw new UserExceptions(HttpStatus.UNAUTHORIZED, "User id or Password is wrong");
+            throw new UserExceptions(HttpStatus.NOT_FOUND, "User id or Password is wrong");
         }
 
-        return loginResponse;
+        return new ApiResponse(true,"Login successfully",loginResponse,null);
     }
 }
